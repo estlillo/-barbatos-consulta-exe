@@ -86,7 +86,7 @@ export default function DocumentoContent({ documento }) {
               <Typography variant="body2">
                 <strong>Firmante:</strong>
               </Typography>
-              <Typography variant="subtitle2">{documento.firmantes[0]}</Typography>
+              <Typography variant="subtitle2">{(documento.firmantes ?? [])[0]}</Typography>
             </Stack>
 
             <Stack direction="row" spacing={1} alignItems="top">
