@@ -27,6 +27,12 @@ export default function handler(req, res) {
       urlRedirect: "/Inyectar",
       active: true,
     },
+    {
+      title: "Carga de documentos",
+      description: "En Desarrollo.",
+      urlRedirect: "/Carga",
+      active: true,
+    },
   ];
 
   const serviciosFiltrados = servicios.filter((servicio) => servicio.active);
