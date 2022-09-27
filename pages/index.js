@@ -17,13 +17,13 @@ export default function Home() {
   return (
     <>
       <h1 className={styles.title}>
-        Bienvenido a <a href="#">ExeConsulta</a>
+        Bienvenido a <a href="#">SocialDoc</a>
       </h1>
 
       <p className={styles.description}>
-        Una extensión para tu gestor documental <strong>ExeDOC</strong>, empieza
+        Una extensión para tu gestor documental <strong>SocialDoc</strong>, empieza
         por hacer clic en uno de los servicios que provee{" "}
-        <strong>ExeConsulta</strong>{" "}
+        <strong>SocialDoc</strong>{" "}
       </p>
       <div className={styles.grid}>
         {servicios.map((servicio, index) => (
