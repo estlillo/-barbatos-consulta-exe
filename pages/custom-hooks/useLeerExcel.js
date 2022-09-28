@@ -16,7 +16,7 @@ export default function useLeerExcel(data) {
       .then((res) => {
         if (res?.data?.status === "success") {
           axios
-            .post("/api/leerexcel", {
+            .post("/api/leerExcel", {
               data,
             })
             .then((response) => {

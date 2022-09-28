@@ -11,13 +11,13 @@ import {
   import SendIcon from "@mui/icons-material/Send";
   import React, { useState } from "react";
   import { FileUpload } from 'primereact/fileupload';
-
+  import { ProgressBar } from 'primereact/progressbar';
   
   import { Controller, FormProvider, useForm } from "react-hook-form";
   import useObtenerData from "@/customHooks/useObtenerData";
   import SelectForm from "@/components/SelectForm";
   import TextFieldForm from "@/components/TextFieldForm";
-  
+  import { Dialog } from 'primereact/dialog';
   import MultipleUsers from "@/components/MultipleUsers";
   import useInyectarDocumento from "@/customHooks/useInyectarDocumento";
   import useLeerExcel from "@/customHooks/useLeerExcel";
@@ -48,7 +48,7 @@ import {
     const [formatoSeleccionado, setFormatoSeleccionado] = React.useState(null);
   
     const [isProceso, setIsProceso] = React.useState(false);
-  
+    const chooseOptions = {label: 'Subir', icon: 'pi pi-fw pi-plus'};
     const [tiposDocumento, errorTd] = useTiposDocumento({
       url: "/api/servicios/tiposDocumento",
       formato: formatoSeleccionado,
@@ -68,6 +68,8 @@ import {
         setLabelProceso("Documento sin proceso");
       }
     };
+
+   
   
     const methods = useForm({
       mode: "all",
@@ -93,7 +95,7 @@ import {
     return (
       <>
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(sendToApi)} enctype="multipart/form-data">
+          <form onSubmit={handleSubmit(sendToApi)}>
             <Grid container spacing={1}>
               <Grid item xs={12} md={12}>
                 <Typography variant="h6" component="h6">
@@ -141,7 +143,7 @@ import {
                   id="rutaExpediente"
                   name="rutaExpediente"
                   inputLabel="Ruta"
-                  helper="Escriba la ruta recibirá donde están los expedientes"
+                  helper="Escriba la ruta recibirá donde están los expedientes (Ej:https://www.web.cl/archivoshistoricos/)"
                   register={register}
                   errors={errors}
                   rules={{
@@ -153,7 +155,7 @@ import {
                   <br/>
             <Button
              variant="contained"
-             type="submit"
+           
              disabled={isLoading}
            >
              Validar directorio
@@ -171,7 +173,7 @@ import {
 
               <Grid item xs={12} md={6}>
                   <br/>
-                  <FileUpload name="demo" url="./upload"></FileUpload>
+                  <FileUpload name="archivoExcel" id="archivoExcel" url="./upload" mode="basic"   chooseOptions={chooseOptions}></FileUpload>
               </Grid>
              
 
@@ -184,6 +186,7 @@ import {
                     padding: "1rem",
                   }}
                 >
+              
                   <Button
                     variant="contained"
                     type="submit"
@@ -192,7 +195,9 @@ import {
                   >
                     Ejecutar carga
                   </Button>
+                  
                   <br></br>
+                
                   {error &&
                     error.map((err) => (
                       <>
@@ -200,11 +205,11 @@ import {
                       </>
                     ))}
   
-                  {isLoading && <div>Cargando...</div>}
+                  {isLoading && <ProgressBar mode="indeterminate"/> }
                   <br></br>
                   {resultado && resultado.mensaje && (
                     <Alert severity="success">
-                      {"Excel inyectado correctamenre " + resultado?.mensaje}
+                      {"Excel inyectado correctamenre "}
                     </Alert>
                   )}
                 </Box>
