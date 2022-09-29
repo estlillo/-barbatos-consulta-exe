@@ -10,9 +10,9 @@ export default function useLeerExcel(data) {
 
   const submitEnquiryForm = (gReCaptchaToken) => {
     axios
-        .post("/api/validarGoogleCaptcha", {
-          gReCaptchaToken,
-    })
+      .post("/api/validarGoogleCaptcha", {
+        gReCaptchaToken,
+      })
       .then((res) => {
         if (res?.data?.status === "success") {
           axios
@@ -21,8 +21,8 @@ export default function useLeerExcel(data) {
             })
             .then((response) => {
 
-              if(response.data?.codigo === "500") setError(response.data.errores);
-              if(response.data?.codigo === "200"){
+              if (response.data?.codigo === "500") setError(response.data.errores);
+              if (response.data?.codigo === "200") {
                 setError([]);
                 setResultado(response.data)
               }

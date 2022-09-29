@@ -2,14 +2,16 @@ import axios from "axios";
 import { obtenerAccessToken } from "./ObtenerToken";
 import path from "path";
 import { promises as fs } from 'fs';
+import formidable from "formidable";
 
 const XLSX = require('xlsx');
 
 export default async function handler(req, res) {
+  const hora = new Date;
   try {
 
     const ruta = req.body.data.rutaExpediente + '/';
-    console.log(ruta);
+    console.log(req.body);
     //Ruta del archivo Excel
     const excelDirectory = path.join(process.cwd(), 'archivos_subir');
     const fileContents = await fs.readFile(excelDirectory + '/Excel_plantilla.xlsx', 'utf8');
@@ -18,12 +20,10 @@ export default async function handler(req, res) {
     const sheet = workbookSheets[0];
     const dataExcel = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
 
-    // Todos los valores de la tabla
-    //    console.log(dataExcel);
+
 
     //PEDIR HORA
-    const hora = new Date;
-
+    //const hora = new Date;
 
     const jsonGeneral = []
     //Inicio de ciclo for para leer cada fila del excel  
@@ -123,11 +123,11 @@ export default async function handler(req, res) {
                 usuario: itemFila['DESTINATARIO (debe existir en bd)'],
               },
             ],
-            parrafos: [] 
+            parrafos: []
           },
         ]
       };
-      //jsonGeneral.push(body);
+      jsonGeneral.push(body);
       const resultado = await axios.post("http://testing.exedoc.cl:80/exedoc/rest/api/inyectarDocumento", body, {
         headers: {
           Authorization: bearerToken,
@@ -135,26 +135,19 @@ export default async function handler(req, res) {
           Accept: "application/json",
         },
       })
-        .then((response) => {
-          console.log(response.data);
-          res.status(200).json(response.data);
-        }).catch(function (error) {
-          console.log(error.response.data);
-          res.status(200).json(error.response.data);
-        });
+
 
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
-
   }
-
- // res.status(200).json(jsonGeneral);
+  
+  const mensaje = "Excel inyectado correctamente";
+  res.status(200).json(mensaje);
+ console.log(res.status(200));
   //PEDIR HORA
-  const hora2 = new Date;
-
-  console.log("LA HORA INICIAL ES: " + hora);
-  console.log("LA HORA FINAL ES: " + hora2);
+  const hora2 = new Date();  
+  console.log(`El proceso tardó: ${(hora2 - hora)/1000} s`);
 }
 
 
