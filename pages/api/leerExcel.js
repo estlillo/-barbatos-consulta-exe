@@ -1,45 +1,26 @@
 import axios from "axios";
 import { obtenerAccessToken } from "./ObtenerToken";
 import path from "path";
-import { promises as fs } from 'fs';
-import formidable from "formidable";
-
 const XLSX = require('xlsx');
 
 export default async function handler(req, res) {
+  //Pedir hora al inicio del proceso para calcular tiempo de carga
   const hora = new Date;
   try {
-
-    const ruta = req.body.data.rutaExpediente + '/';
-    console.log(req.body);
-    //Ruta del archivo Excel
+    //Ruta y lectura de archivo Excel
     const excelDirectory = path.join(process.cwd(), 'archivos_subir');
-    const fileContents = await fs.readFile(excelDirectory + '/Excel_plantilla.xlsx', 'utf8');
     const workbook = XLSX.readFile(excelDirectory + '/Excel_plantilla.xlsx');
     const workbookSheets = workbook.SheetNames;
     const sheet = workbookSheets[0];
     const dataExcel = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-
-
-
-    //PEDIR HORA
-    //const hora = new Date;
-
     const jsonGeneral = []
-    //Inicio de ciclo for para leer cada fila del excel  
+
+    //Lectura de cada fila del excel  
     for (const itemFila of dataExcel) {
       const bearerToken = await obtenerAccessToken();
-      var varExcel = itemFila['NOMBRE DOCUMENTO'];
-      var file = ruta + varExcel;
-      console.log(itemFila['ANTECEDENTES']);
 
-
-
-
-
-      //Traducción de variables TIPO DE DOCUMENTO
+      //Traducción de variables "TIPO DE DOCUMENTO"
       const tipodocumento = itemFila['TIPO DOCUMENTO (debe existir en bd)'].toString().normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-      console.log("Tipo de documento es: " + tipodocumento);
       var CodigoTipodocumento = "";
       switch (tipodocumento) {
         case "carta":
@@ -135,23 +116,17 @@ export default async function handler(req, res) {
           Accept: "application/json",
         },
       })
-
-
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-  
   const mensaje = "Excel inyectado correctamente";
   res.status(200).json(mensaje);
- console.log(res.status(200));
-  //PEDIR HORA
-  const hora2 = new Date();  
-  console.log(`El proceso tardó: ${(hora2 - hora)/1000} s`);
+
+  //Calculo demora del proceso
+  const hora2 = new Date();
+  console.log(`El proceso tardó: ${(hora2 - hora) / 1000} s`);
 }
 
-
-//Ubicación del archivo PDF a copiar desde el Excel
-//leerExcel('../../pdf/');
 
 
