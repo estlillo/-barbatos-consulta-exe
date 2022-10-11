@@ -223,7 +223,7 @@ export default function FormInyeccion() {
             <Grid item xs={12} md={12}>
               <SelectForm
                 inputLabel="Seleccione el tipo de denuncia que va a reportar"
-                name="unidadNegocio"
+                name="tipoDenuncia"
                 register={register}
                 options={tipoDenunciaOptions}
                 helper="Seleccione tipo de denuncia"
