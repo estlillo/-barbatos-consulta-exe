@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   try {
     const bearerToken = await obtenerAccessToken();
 
-    const defaultUser = "copazo";
+    const defaultUser = "elillo";
 
     let personasImplicadas = [];
     req.body.data.personasImplicadas && req.body.data.personasImplicadas.map((implicado, index) => {
@@ -80,20 +80,21 @@ export default async function handler(req, res) {
             descripcionDetalladaDenuncia: req.body.data.descripcionDetalladaDenuncia,
             primeraVezDenunciaEtica: req.body.data.primeraVezDenunciaEtica,
             comoSeEntero: req.body.data.comoSeEntero,
-            personasImplicadas: personasImplicadas,
+            implicados: personasImplicadas,
+            tipoDenuncia: req.body.data.tipoDenuncia,
 
           },
           tieneProceso: false,
           idProceso: "",
           tipoDocumentoExpediente: 1,
           formatoDocumento: 3,
-          tipoDocumento: req.body.data.tipoDocumento,
+          tipoDocumento: 65,
           numero: "",
           numeroDocumentoPapel: req.body.data.numeroExterno,
           fecha: "",
           ciudad: req.body.data.ciudad,
-          antecedentes: req.body.data.antecedentes,
-          materia: req.body.data.materia,
+          antecedentes: "Reporte de denuncia",
+          materia: "Reporte de denuncia",
           reservado: false,
           plazo: "",
           nivelUrgencia: "",
@@ -102,7 +103,7 @@ export default async function handler(req, res) {
           emisor: defaultUser,
           distinatarios: [
             {
-              usuario: req.body.data.destinatarios,
+              usuario: defaultUser,
             },
           ],
           parrafos: [
@@ -132,7 +133,7 @@ export default async function handler(req, res) {
 
 
     axios
-      .post("http://testing.exedoc.cl:80/exedoc/rest/api/inyectarDocumento", body, {
+    .post("http://testing.exedoc.cl:80/exedoc/rest/api/inyectarDocumento", body, {
         headers: {
           Authorization: bearerToken,
           "Content-Type": "application/json",
