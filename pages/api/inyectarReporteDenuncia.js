@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   try {
     const bearerToken = await obtenerAccessToken();
 
-    const defaultUser = "elillo";
+    const defaultUser = "copazo";
 
     let personasImplicadas = [];
     req.body.data.personasImplicadas && req.body.data.personasImplicadas.map((implicado, index) => {
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
             tipoDenuncia: req.body.data.tipoDenuncia,
 
           },
-          tieneProceso: false,
+          tieneProceso: false, 
           idProceso: "",
           tipoDocumentoExpediente: 1,
           formatoDocumento: 3,

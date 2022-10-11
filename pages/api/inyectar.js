@@ -22,6 +22,7 @@ const jsonDocumento = {
 };
 
 export default async function handler(req, res) {
+  console.log("|||||||||||||||||");
   try {
     const bearerToken = await obtenerAccessToken();
 
@@ -115,6 +116,7 @@ export default async function handler(req, res) {
       ],
     };
 
+    console.log(body)
 
     axios
       .post("http://testing.exedoc.cl:80/exedoc/rest/api/inyectarDocumento", body, {
@@ -132,6 +134,8 @@ export default async function handler(req, res) {
         res.status(200).json(error.response.data);
       });
   } catch (error) {
+    console.log("error");
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 }
