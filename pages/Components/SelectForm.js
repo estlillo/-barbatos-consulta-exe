@@ -37,6 +37,7 @@ export default function SelectForm({
     <FormControl fullWidth margin="normal" error={hasError}>
       <InputLabel id="demo-simple-select-label">{inputLabel}</InputLabel>
       <Select
+        displayEmpty
         {...(register && register(name, rules))}
         {...props}
         labelId="demo-simple-select-label"

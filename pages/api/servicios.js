@@ -22,9 +22,9 @@ export default function handler(req, res) {
       active: false,
     },
     {
-      title: "Inyección de documentos (En construcción)",
-      description: "Inyecta documentos al gestor.",
-      urlRedirect: "/Inyectar",
+      title: "Inyección de documentos",
+      description: "Inyecta tipos de documento específicos al gestor.",
+      urlRedirect: "/DocumentosEspecificos",
       active: true,
     },
   ];
