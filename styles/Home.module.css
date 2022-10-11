@@ -22,6 +22,14 @@
   color: grey;
 }
 
+.alignElement {
+  display: flex;
+  flex: 1;
+  padding: 1rem;
+  justify-content: left;
+  align-items: center;
+}
+
 .footer a {
   display: flex;
   justify-content: center;

@@ -5,7 +5,9 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import Image from "next/image";
 import React from "react";
+import styles from "@/styles/Home.module.css";
 
 export default function SelectForm({
   inputLabel,
@@ -46,13 +48,13 @@ export default function SelectForm({
         label={inputLabel}
         onChange={handleChange}
         disabled={
-          disabled || options?.length === 0
+          disabled || options?.length === 0 
         }
       >
         {options &&
           options.map((option, index) => (
-            <MenuItem key={index} value={option.id}>
-              {option.description}
+            <MenuItem key={index} value={option.id} className={styles.alignElement}>
+             {option.flag && <Image src={"/flags/"+option.flag} width={17} height={17}/>} {option.description} 
             </MenuItem>
           ))}
       </Select>

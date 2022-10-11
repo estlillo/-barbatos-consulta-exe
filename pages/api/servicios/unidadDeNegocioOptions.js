@@ -3,14 +3,17 @@ export default function handler(req, res) {
     {
       id: "Chile",
       description: "Chile",
+      flag: "chile.png",
     },
     {
       id: "Paraguay",
       description: "Paraguay",
+      flag: "paraguay.png",
     },
     {
-      id: "Peru",
-      description: "Peru",
+      id: "Perú",
+      description: "Perú",
+      flag: "peru.png",
     }
   ];
 
