@@ -23,7 +23,9 @@ export default function DateCustomPicker({ inputLabel, name, placeholder, value,
         KeyboardButtonProps={{
           "aria-label": "change date",
         }}
-        onChange={onChange}
+        onChange={(value) => {
+          formik.setFieldValue('fecha', Date.parse(value));
+        }}
         renderInput={(params) => (
           <TextField margin="normal" fullWidth {...params} />
         )}

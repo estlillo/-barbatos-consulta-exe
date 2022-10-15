@@ -4,11 +4,45 @@ import axios from "axios";
 import { obtenerAccessToken } from "./ObtenerToken";
 
 
+
 export default async function handler(req, res) {
   try {
     const bearerToken = await obtenerAccessToken();
 
     const defaultUser = "copazo";
+    const urlDownloadBase = "http://www.barbatos-dev.com:3001/api/downloadfile/";
+
+    let nombreArchivos = [];
+
+
+
+
+    req.body.data.adjuntosUrls && req.body.data.adjuntosUrls.map((adjunto, index) => {
+      let adjuntoUrl = {
+        data: urlDownloadBase+adjunto,
+        nombreArchivo: adjunto,
+        contentType: "application/pdf",
+        tipoDescarga: "url"
+      };
+      nombreArchivos.push(adjuntoUrl);
+    });
+
+    let observaciones = [];
+
+    req.body.data.adjuntosUrls && req.body.data.adjuntosUrls.map((adjunto, index) => {
+      let obs = {
+        texto: "prueba" +index,
+        archivo: {
+          data: urlDownloadBase+adjunto,
+          nombreArchivo: adjunto,
+          contentType: "application/pdf",
+          tipoDescarga: "url"
+        },
+        adjuntadoPor: defaultUser
+      };
+      observaciones.push(obs);
+    });
+    
 
     let personasImplicadas = [];
     req.body.data.personasImplicadas && req.body.data.personasImplicadas.map((implicado, index) => {
@@ -62,7 +96,7 @@ export default async function handler(req, res) {
         },
       ],
       destinatarioGrupo: [],
-      observaciones: [],
+      observaciones: observaciones,
       documentos: [
         {
           datosReporteDenuncia: {
@@ -113,15 +147,7 @@ export default async function handler(req, res) {
               tipoParrafo: 2,
             },
           ],
-          adjuntos: [
-            {
-              data: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-              nombreArchivo: "documento.pdf",
-              contentType: "application/pdf",
-              materia: "materia de prueba 1",
-              tipoDescarga: "url",
-            },
-          ],
+          adjuntos: nombreArchivos,
           revisores: [],
           visadores: visadoresDocumento,
           firmantes: firmantesDocumento,
@@ -130,6 +156,8 @@ export default async function handler(req, res) {
       ],
     };
     console.log(body.documentos[0].datosReporteDenuncia);
+    console.log(body.documentos[0].adjuntos);
+    console.log(body.observaciones);
 
 
     axios
@@ -147,6 +175,7 @@ export default async function handler(req, res) {
         console.log(error.response.data); 
         res.status(200).json(error.response.data);
       });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -13,10 +13,6 @@ export default function handler(req, res) {
       description: "Póster",
     },
     {
-      id: "Póster",
-      description: "Póster",
-    },
-    {
       id: "Correo Electrónico",
       description: "Correo Electrónico",
     },

@@ -12,12 +12,16 @@ const importJodit = () => import("jodit-react");
 import dynamic from "next/dynamic";
 import MultipleUsersImplicados from "../MultipleUsersImplicados";
 import useInyectarReporteDenuncia from "@/customHooks/useInyectarReporteDenuncia";
+import FileUploadFieldForm from "../FileUploadFieldForm";
+import axios from "axios";
 
 const JoditEditor = dynamic(importJodit, {
   ssr: false,
 });
 
 export default function FormInyeccion() {
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
   const [data, setData] = React.useState(null);
   const [labelProceso, setLabelProceso] = React.useState("No");
   const [formatoSeleccionado, setFormatoSeleccionado] = React.useState(null);
@@ -53,25 +57,59 @@ export default function FormInyeccion() {
     }
   };
 
+  const [pdf, setPdf] = React.useState("");
+
   const methods = useForm({
     mode: "all",
     reValidateMode: "onChange",
-    defaultValues: {}, // Apparently `defaultValues` being null is a DEAL BREAKER!
+    defaultValues: {
+      archivos: [],
+    }, // Apparently `defaultValues` being null is a DEAL BREAKER!
     shouldFocusError: true, // focus input field after submit if it is not following required rule of input field
   });
 
   const {
     control,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = methods;
   const [isLoading, resultado, error] = useInyectarReporteDenuncia(data);
 
-  const sendToApi = (data) => {
+  const sendToApi = async (data) => {
+/*
+    console.log("inicio files")
+
+    console.log(data.picture[0].name);
+    setPdf(data.picture[0].name);
+
+    setValue("archivos", pdf);
+
+    console.log("data nueva");
     console.log(data);
+
+    await uploadFileToS3(data.picture)
+*/
     setData(data);
+
+
   };
+
+  const uploadFileToS3 = async (file, index) => {
+    console.log("UPLOADING FILE "+index);
+    const formData = new FormData();
+    formData.append("file", file);
+    const result = await axios.post(
+      "http://localhost:3001/api/files",
+      formData
+    );
+
+    console.log("FINISH UPLOADING FILE "+index);
+
+    return result;
+  };
+
 
   return (
     <>
@@ -113,7 +151,6 @@ export default function FormInyeccion() {
                 }}
               />
             </Grid>
-            
 
             <Divider />
 
@@ -305,6 +342,14 @@ export default function FormInyeccion() {
                   required: "Campo obligatorio",
                 }}
                 errors={errors}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <FileUploadFieldForm
+                register={register}
+                name="picture"
+                rules={{ required: "Campo obligatorio" }}
               />
             </Grid>
 
