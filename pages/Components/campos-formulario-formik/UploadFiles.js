@@ -41,9 +41,6 @@ export default function UploadFiles(props) {
 
             //get file names in array
             const fileNames = Object.values(files).map((file) => file.name);
-         
-               
-
 
             let myFiles = Array.from(files);
             setFieldValue(name, myFiles);

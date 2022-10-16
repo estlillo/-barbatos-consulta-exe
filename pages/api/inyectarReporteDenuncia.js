@@ -14,13 +14,12 @@ export default async function handler(req, res) {
 
     let nombreArchivos = [];
 
-
-
-
     req.body.data.adjuntosUrls && req.body.data.adjuntosUrls.map((adjunto, index) => {
+     const {nombre, llave} = adjunto;
+
       let adjuntoUrl = {
-        data: urlDownloadBase+adjunto,
-        nombreArchivo: adjunto,
+        data: urlDownloadBase+llave,
+        nombreArchivo: nombre.replace(/\s/g, "_"),
         contentType: "application/pdf",
         tipoDescarga: "url"
       };
@@ -29,7 +28,7 @@ export default async function handler(req, res) {
 
     let observaciones = [];
 
-    req.body.data.adjuntosUrls && req.body.data.adjuntosUrls.map((adjunto, index) => {
+    req.body.data.observaciones && req.body.data.observaciones.map((adjunto, index) => {
       let obs = {
         texto: "prueba" +index,
         archivo: {
@@ -87,7 +86,7 @@ export default async function handler(req, res) {
       distribucionDocumento.push(disDocumento);
     });  
 
-    const body = {
+    let body = { 
       emisor: defaultUser,
       destinatariosExpediente: [
         {
@@ -157,7 +156,6 @@ export default async function handler(req, res) {
     };
     console.log(body.documentos[0].datosReporteDenuncia);
     console.log(body.documentos[0].adjuntos);
-    console.log(body.observaciones);
 
 
     axios
@@ -168,8 +166,9 @@ export default async function handler(req, res) {
           Accept: "application/json",
         },
       })
-      .then((response) => {
+      .then((response) => { 
         console.log(response.data);
+        body = null;
         res.status(200).json(response.data);
       }).catch(function(error) {
         console.log(error.response.data); 

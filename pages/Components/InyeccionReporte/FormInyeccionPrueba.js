@@ -1,4 +1,8 @@
-import { Button, Grid, TextField } from "@mui/material";
+import {
+  Alert,
+  Grid,
+  TextField,
+} from "@mui/material";
 
 import React from "react";
 
@@ -8,40 +12,32 @@ const importJodit = () => import("jodit-react");
 
 import dynamic from "next/dynamic";
 
-import { Formik, useFormik } from "formik";
-import * as yup from "yup";
+import {useFormik } from "formik";
 
 import InputText from "../campos-formulario-formik/InputText";
 import RadioInput from "../campos-formulario-formik/RadioInput";
 import DatePickerInput from "../campos-formulario-formik/DatePickerInput";
 import SelectInput from "../campos-formulario-formik/SelectInput";
-import UploadFiles from "../campos-formulario-formik/UploadFiles";
-import InyectarReporteRenunciaService from "pages/servicios-front/InyectarReporteRenunciaService";
 import useInyectarReporteDenuncia from "@/customHooks/useInyectarReporteDenuncia";
-import axios from "axios";
-
+import SendIcon from "@mui/icons-material/Send";
+import LoadingButton from "@mui/lab/LoadingButton";
+import UploadFileDragNDrop from "../campos-formulario-formik/UploadFileDragNDrop";
+import { InitialValues, ValidationSchema } from "./Validaciones";
+import { UploadFiles } from "pages/servicios-front/UploadFiles";
+import { sleep } from "pages/servicios-front/Utils";
 const JoditEditor = dynamic(importJodit, {
   ssr: false,
 });
 
-const validationSchema = yup.object({
-  email: yup
-    .string("Enter your email")
-    .email("Enter a valid email")
-    .required("Email is required"),
-  password: yup
-    .string("Enter your password")
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
-  comoSeDioCuena: yup.string("Campo obligatorio"),
-});
+
 
 export default function FormInyeccionPrueba() {
-  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const [data, setData] = React.useState(null);
   const [labelProceso, setLabelProceso] = React.useState("No");
   const [formatoSeleccionado, setFormatoSeleccionado] = React.useState(null);
+
+  const [cargando, setCargando] = React.useState(false);
 
   const [isProceso, setIsProceso] = React.useState(false);
 
@@ -77,69 +73,26 @@ export default function FormInyeccionPrueba() {
   };
 
   const sendToApi = async (values) => {
-    console.log("enviando a la api");
-
-    console.log(values);
-
+    setCargando(true);
+    console.log("values", values);
     setData(values);
-
-    // const result = await InyectarReporteRenunciaService.inyectarReporteDenuncia(values);
-
-    console.log("finaliza envio a api");
-
-    console.log(resultado);
+    setCargando(false);
   };
 
-  const uploadFiles = async (values) => {
-    const res = values.adjuntos.map(async (file, index) => {
-      console.log("simula subir archivo");
-      const s3result = await uploadFileToS3(file, index);
-      console.log(s3result);
-    });
-  };
-
-  function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
-
-  const uploadFileToS3 = async (file, index) => {
-    console.log("UPLOADING FILE " + index);
-    const formData = new FormData();
-    formData.append("file", file);
-    const result = await axios.post(
-      "http://localhost:3001/api/files",
-      formData
-    );
-
-    console.log("FINISH UPLOADING FILE " + index);
-
-    return result;
-  };
-
+  //Configuración de Formik
   const formik = useFormik({
-    initialValues: {
-      email: "mail@mail.com",
-      password: "foobar2313123",
-      comoSeDioCuena: "foobar2",
-      age: "Empleado",
-      gender: "female",
-      haceCuantoSucedieronLosHechos: new Date(),
-      relacionConEmpresa: "",
-      comoSeEntero: "",
-      unidadNegocio: "",
-      adjuntos: [],
-      adjuntosUrls: [],
-      adjuntosOtros: [],
-    },
-    validationSchema: validationSchema,
+    initialValues: InitialValues,
+    validationSchema: ValidationSchema,
     onSubmit: async (values) => {
-      uploadFiles(values);
-      console.log("esperando 5 segundos");
-      await sleep(5000);
-      console.log("termino de esperar");
-      sendToApi(values);
+
+
+      //Primero se cargan los archivos a S3 (Las urls de descarga se setean previamente en los values de formik)
+      const res = await UploadFiles(values.adjuntos);
+    //  console.log("adjuntos ",values.adjuntos);
+    //  console.log("adjuntos URLS",values.adjuntosUrls);
+      await sleep(1500);
+      await sendToApi(values);
+     formik.resetForm();
     },
   });
 
@@ -150,9 +103,11 @@ export default function FormInyeccionPrueba() {
           <Grid item xs={12}>
             <DatePickerInput
               name="haceCuantoSucedieronLosHechos"
-              label="¿Hace cuánto sucedieron los hechos? test"
+              label="¿Hace cuánto sucedieron los hechos?"
               value={formik.values.haceCuantoSucedieronLosHechos}
               setFieldValue={formik.setFieldValue}
+              touched={formik.touched.haceCuantoSucedieronLosHechos}
+              error={formik.errors.haceCuantoSucedieronLosHechos}
               disableFuture
             />
           </Grid>
@@ -164,6 +119,8 @@ export default function FormInyeccionPrueba() {
               value={formik.values.relacionConEmpresa}
               onChange={formik.handleChange}
               options={relacionEmpresaOptions}
+              touched={formik.touched.relacionConEmpresa}
+              error={formik.errors.relacionConEmpresa}
               row
             />
           </Grid>
@@ -174,6 +131,8 @@ export default function FormInyeccionPrueba() {
               value={formik.values.unidadNegocio}
               onChange={formik.handleChange}
               options={unidadDeNegocioOptions}
+              touched={formik.touched.unidadNegocio}
+              error={formik.errors.unidadNegocio}
               row
               spacing={1}
             />
@@ -185,6 +144,8 @@ export default function FormInyeccionPrueba() {
               value={formik.values.comoSeEntero}
               onChange={formik.handleChange}
               options={lineaDenunciaOptions}
+              touched={formik.touched.comoSeEntero}
+              error={formik.errors.comoSeEntero}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -228,14 +189,44 @@ export default function FormInyeccionPrueba() {
               }
             />
           </Grid>
+       
           <Grid item xs={12} md={12}>
-            <UploadFiles name="adjuntos" setFieldValue={formik.setFieldValue} />
+            <UploadFileDragNDrop
+              name="adjuntos"
+              label="Adjuntar archivos"
+              setFieldValue={formik.setFieldValue}
+            />
           </Grid>
 
           <Grid item xs={12} md={12}>
-            <Button color="primary" variant="contained" fullWidth type="submit">
-              Submit
-            </Button>
+            
+
+            <LoadingButton
+              type="submit"
+              fullWidth
+              endIcon={<SendIcon />}
+              loading={formik.isSubmitting}
+              loadingPosition="end"
+              variant="contained"
+            >
+              Enviar al gestor
+            </LoadingButton>
+
+            <br></br>
+            {error &&
+              error.map((err) => (
+                <>
+                  <Alert severity="error">{err}</Alert> <br></br>
+                </>
+              ))}
+
+            {cargando && <div>Cargando...</div>}
+            <br></br>
+            {resultado && resultado.mensaje && (
+              <Alert severity="success">
+                {"Expediente inyectado correctamente " + resultado?.mensaje}
+              </Alert>
+            )}
           </Grid>
         </Grid>
       </form>

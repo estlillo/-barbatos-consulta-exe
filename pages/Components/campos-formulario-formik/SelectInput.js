@@ -21,7 +21,7 @@ export default function SelectInput(props) {
         row = null,
       } = props;
   return (
-    <FormControl fullWidth margin="normal">
+    <FormControl fullWidth margin="normal" error={error && Boolean(error)}>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
         labelId="demo-simple-select-label"
@@ -38,6 +38,7 @@ export default function SelectInput(props) {
             </MenuItem>
           ))}
       </Select>
+      <FormHelperText>{touched && error}</FormHelperText>
     </FormControl>
   );
 }

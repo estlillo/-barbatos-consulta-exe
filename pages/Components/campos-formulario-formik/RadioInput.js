@@ -1,6 +1,7 @@
 import {
   FormControl,
   FormControlLabel,
+  FormHelperText,
   FormLabel,
   Radio,
   RadioGroup,
@@ -25,7 +26,7 @@ export default function RadioInput(props) {
   } = props;
 
   return (
-    <FormControl fullWidth margin="normal">
+    <FormControl fullWidth margin="normal" error={error && Boolean(error)}>
       <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel>
       <RadioGroup
         row={row}
@@ -64,6 +65,7 @@ export default function RadioInput(props) {
             />
           ))}
       </RadioGroup>
+      <FormHelperText>{touched && error}</FormHelperText>
     </FormControl>
   );
 }
