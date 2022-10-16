@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     
 
     let personasImplicadas = [];
-    req.body.data.personasImplicadas && req.body.data.personasImplicadas.map((implicado, index) => {
+    req.body.data.implicados && req.body.data.implicados.map((implicado, index) => {
       let personaImplicada = {
         usuario: implicado.usuario,
         cargo: implicado.cargo,

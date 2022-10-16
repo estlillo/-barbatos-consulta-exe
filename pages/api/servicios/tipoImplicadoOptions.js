@@ -9,8 +9,8 @@ export default function handler(req, res) {
       description: "Testigo",
     },
     {
-      id: "Víctima",
-      description: "Víctima",
+      id: "Victima",
+      description: "Victima",
     }
   ];
 

@@ -14,11 +14,13 @@ export const InitialValues = {
   personasImplicadas: "",
   quienEstaEntereado: "",
   detalleEvidencia: "",
+  asuntoDenuncia: "",
   descripcionDetalladaDenuncia: "",
   primeraVezDenunciaEtica: "",
   comoSeEntero: "",
   adjuntos: [],
   adjuntosUrls: [],
+  implicados:[]
 };
 
 export const ValidationSchema = yup.object({
