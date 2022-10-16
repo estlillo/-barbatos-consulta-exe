@@ -1,8 +1,4 @@
-import {
-  Alert,
-  Grid,
-  TextField,
-} from "@mui/material";
+import { Alert, Divider, Grid, TextField, Typography } from "@mui/material";
 
 import React from "react";
 
@@ -11,8 +7,8 @@ import useObtenerData from "@/customHooks/useObtenerData";
 const importJodit = () => import("jodit-react");
 
 import dynamic from "next/dynamic";
-
-import {useFormik } from "formik";
+import styles from "@/styles/Home.module.css";
+import { useFormik } from "formik";
 
 import InputText from "../campos-formulario-formik/InputText";
 import RadioInput from "../campos-formulario-formik/RadioInput";
@@ -25,14 +21,12 @@ import UploadFileDragNDrop from "../campos-formulario-formik/UploadFileDragNDrop
 import { InitialValues, ValidationSchema } from "./Validaciones";
 import { UploadFiles } from "servicios/UploadFiles";
 import { sleep } from "servicios/Utils";
+import TimePickerInput from "../campos-formulario-formik/TimePickerInput";
 const JoditEditor = dynamic(importJodit, {
   ssr: false,
 });
 
-
-
 export default function FormInyeccionPrueba() {
-
   const [data, setData] = React.useState(null);
   const [labelProceso, setLabelProceso] = React.useState("No");
   const [formatoSeleccionado, setFormatoSeleccionado] = React.useState(null);
@@ -84,35 +78,29 @@ export default function FormInyeccionPrueba() {
     initialValues: InitialValues,
     validationSchema: ValidationSchema,
     onSubmit: async (values) => {
-
-
+      console.log("values", values);
       //Primero se cargan los archivos a S3 (Las urls de descarga se setean previamente en los values de formik)
       const res = await UploadFiles(values.adjuntos);
-    //  console.log("adjuntos ",values.adjuntos);
-    //  console.log("adjuntos URLS",values.adjuntosUrls);
+        console.log("adjuntos ",values.adjuntos);
+        console.log("adjuntos URLS",values.adjuntosUrls);
       await sleep(1500);
       await sendToApi(values);
-     formik.resetForm();
+      formik.resetForm();
     },
   });
 
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <DatePickerInput
-              name="haceCuantoSucedieronLosHechos"
-              label="¿Hace cuánto sucedieron los hechos?"
-              value={formik.values.haceCuantoSucedieronLosHechos}
-              setFieldValue={formik.setFieldValue}
-              touched={formik.touched.haceCuantoSucedieronLosHechos}
-              error={formik.errors.haceCuantoSucedieronLosHechos}
-              disableFuture
-            />
+        <Grid  container spacing={1}>
+          <Grid item xs={12} md={12} className={styles.seccion} >
+            <Typography variant="h6" component="h6">
+              Información del denunciante
+            </Typography>
+            <Divider />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
             <RadioInput
               name="relacionConEmpresa"
               label="Relación con la empresa"
@@ -124,7 +112,50 @@ export default function FormInyeccionPrueba() {
               row
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
+            <InputText
+              name="comoSeDioCuena"
+              label="¿Cómo se dio cuenta?"
+              placeholder="Ejemplo: Lo vi, Me sucedió, Lo escuché, etc."
+              value={formik.values.comoSeDioCuena}
+              onChange={formik.handleChange}
+              touched={formik.touched.comoSeDioCuena}
+              error={formik.errors.comoSeDioCuena}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <RadioInput
+              name="comoDeseaEnviarReporte"
+              label="¿Cómo desea enviar su reporte?"
+              value={formik.values.comoDeseaEnviarReporte}
+              onChange={formik.handleChange}
+              options={envioReporteOptions}
+              touched={formik.touched.comoDeseaEnviarReporte}
+              error={formik.errors.comoDeseaEnviarReporte}
+              row
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <InputText
+              name="correoElectronico"
+              label="Correo electrónico"
+              placeholder="Escriba una dirección válida"
+              value={formik.values.correoElectronico}
+              onChange={formik.handleChange}
+              touched={formik.touched.correoElectronico}
+              error={formik.errors.correoElectronico}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={12} className={styles.seccion}>
+            <Typography variant="h6" component="h6">
+              Lugar de los hechos
+            </Typography>
+            <Divider />
+          </Grid>
+
+          <Grid item xs={12} md={12}>
             <RadioInput
               name="unidadNegocio"
               label="Unidad de negocio"
@@ -137,8 +168,159 @@ export default function FormInyeccionPrueba() {
               spacing={1}
             />
           </Grid>
-          <Grid item xs={12}>
-            <SelectInput
+
+          <Grid item xs={12} md={6}>
+            <InputText
+              name="dondeSucedieronLosHechos"
+              label="¿Dónde sucedieron los hechos?"
+              placeholder="Ejemplo: Oficina, Planta, Bodega, Estacionamiento, etc."
+              value={formik.values.dondeSucedieronLosHechos}
+              onChange={formik.handleChange}
+              touched={formik.touched.dondeSucedieronLosHechos}
+              error={formik.errors.dondeSucedieronLosHechos}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <DatePickerInput
+              name="haceCuantoSucedieronLosHechos"
+              label="¿Hace cuánto sucedieron los hechos?"
+              value={formik.values.haceCuantoSucedieronLosHechos}
+              setFieldValue={formik.setFieldValue}
+              touched={formik.touched.haceCuantoSucedieronLosHechos}
+              error={formik.errors.haceCuantoSucedieronLosHechos}
+              disableFuture
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+          <TimePickerInput
+              name="horaAproximada"
+              label="Hora aproximada"
+              value={formik.values.horaAproximada}
+              setFieldValue={formik.setFieldValue}
+              touched={formik.touched.horaAproximada}
+              error={formik.errors.horaAproximada}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <InputText
+              name="direccionDeLosHechos"
+              label="Dirección de los hechos"
+              placeholder="Indique la dirección de los hechos"
+              value={formik.values.direccionDeLosHechos}
+              onChange={formik.handleChange}
+              touched={formik.touched.direccionDeLosHechos}
+              error={formik.errors.direccionDeLosHechos}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={12} className={styles.seccion}>
+            <Typography variant="h6" component="h6">
+              Hechos de la denuncia
+            </Typography>
+            <Divider />
+          </Grid>
+
+          <Grid item xs={12} md={12}>
+            <RadioInput
+              name="tipoDenuncia"
+              label="Seleccione el tipo de denuncia que va a reportar"
+              value={formik.values.tipoDenuncia}
+              onChange={formik.handleChange}
+              options={tipoDenunciaOptions}
+              touched={formik.touched.tipoDenuncia}
+              error={formik.errors.tipoDenuncia}
+              row
+            />
+          </Grid>
+
+          <Grid item xs={12} md={12}>
+           Personas Implicadas
+          </Grid>
+
+          
+
+          <Grid item xs={12} md={12}>
+            <UploadFileDragNDrop
+              name="adjuntos"
+              fileNames="adjuntosUrls"
+              label="Si cuenta con evidencia de la situación, adjúntela aquí"
+              setFieldValue={formik.setFieldValue}
+            />
+          </Grid>
+
+
+          <Grid item xs={12} md={6}>
+          <InputText
+              name="quienEstaEntereado"
+              label="¿Quién más está enterado del problema?"
+              placeholder="Mencione a cualquier persona que esté enterada del problema"
+              value={formik.values.quienEstaEntereado}
+              onChange={formik.handleChange}
+              touched={formik.touched.quienEstaEntereado}
+              error={formik.errors.quienEstaEntereado}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+          <InputText
+              name="detalleEvidencia"
+              label="Detalle si sabe o sospecha dónde se puede conseguir más evidencia de la situación"
+              placeholder="Ejemplo: Video, fotografía, etc."
+              value={formik.values.detalleEvidencia}
+              onChange={formik.handleChange}
+              touched={formik.touched.detalleEvidencia}
+              error={formik.errors.detalleEvidencia}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={12}>
+          <InputText
+              name="asuntoDenuncia"
+              label="Asunto de la denuncia"
+              placeholder="Describa en pocas palabras de que trata su denuncia"
+              value={formik.values.asuntoDenuncia}
+              onChange={formik.handleChange}
+              touched={formik.touched.asuntoDenuncia}
+              error={formik.errors.asuntoDenuncia}
+            />
+          </Grid>
+
+          
+          <Grid item xs={12} md={12}>
+          <InputText
+              name="descripcionDetalladaDenuncia"
+              label="Descripción detallada de la denuncia"
+              placeholder="Describa en forma cronológica y lo más detallado posible todos los hechos de la denuncia respondiendo a preguntas como: ¿Qué?, ¿Quién?, ¿Cuándo?, ¿Dónde?, ¿Cómo?, ¿Por qué?, ¿Con quién?, ¿Cuánto?, etc."
+              value={formik.values.descripcionDetalladaDenuncia}
+              onChange={formik.handleChange}
+              touched={formik.touched.descripcionDetalladaDenuncia}
+              error={formik.errors.descripcionDetalladaDenuncia}
+              multiline
+              rows={10}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+          <RadioInput
+              name="primeraVezDenunciaEtica"
+              label="¿Es la primera vez que utiliza la línea de denuncia ética?"
+              value={formik.values.primeraVezDenunciaEtica}
+              onChange={formik.handleChange}
+              options={[
+                { id: "Si", description: "SÍ" },
+                { id: "No", description: "No" },
+              ]}
+              touched={formik.touched.primeraVezDenunciaEtica}
+              error={formik.errors.primeraVezDenunciaEtica}
+              row
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+          <SelectInput
               name="comoSeEntero"
               label="¿Cómo se enteró de la línea de denuncia ética?"
               value={formik.values.comoSeEntero}
@@ -148,59 +330,9 @@ export default function FormInyeccionPrueba() {
               error={formik.errors.comoSeEntero}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <InputText
-              name="email"
-              label="Email"
-              placeholder="Ingrese su email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              touched={formik.touched.email}
-              error={formik.errors.email}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <InputText
-              name="password"
-              label="Password"
-              type="password"
-              placeholder="Ingrese su password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              touched={formik.touched.password}
-              error={formik.errors.password}
-            />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="comoSeDioCuena"
-              name="comoSeDioCuena"
-              label="¿Cómo se dio cuenta?"
-              value={formik.values.comoSeDioCuena}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.comoSeDioCuena &&
-                Boolean(formik.errors.comoSeDioCuena)
-              }
-              helperText={
-                formik.touched.comoSeDioCuena && formik.errors.comoSeDioCuena
-              }
-            />
-          </Grid>
-       
-          <Grid item xs={12} md={12}>
-            <UploadFileDragNDrop
-              name="adjuntos"
-              label="Adjuntar archivos"
-              setFieldValue={formik.setFieldValue}
-            />
-          </Grid>
+
 
           <Grid item xs={12} md={12}>
-            
-
             <LoadingButton
               type="submit"
               fullWidth

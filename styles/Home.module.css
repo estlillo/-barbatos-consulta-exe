@@ -136,6 +136,10 @@
   cursor: pointer;
   margin-top: 1rem;
 }
+.seccion {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
 
 @media (max-width: 600px) {
   .grid {

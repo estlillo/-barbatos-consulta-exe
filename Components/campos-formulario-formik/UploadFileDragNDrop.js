@@ -12,6 +12,12 @@ import React, { useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from "uuid";
 
+import AudioFileIcon from "@mui/icons-material/AudioFile";
+import VideoFileIcon from "@mui/icons-material/VideoFile";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import ImageIcon from "@mui/icons-material/Image";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+
 const baseStyle = {
   flex: 1,
   display: "flex",
@@ -40,7 +46,7 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 export default function UploadFileDragNDrop(props) {
-  const { name, label, setFieldValue } = props;
+  const { name, fileNames, label, setFieldValue } = props;
   const {
     acceptedFiles,
     getRootProps,
@@ -72,7 +78,7 @@ export default function UploadFileDragNDrop(props) {
         nombreArchivos.push(archivoObj);
       });
       setFieldValue(name, myFiles);
-      setFieldValue(name + "Urls", nombreArchivos);
+      setFieldValue(fileNames, nombreArchivos);
       setFileList(myFiles);
     },
   });
@@ -91,13 +97,22 @@ export default function UploadFileDragNDrop(props) {
 
   return (
     <FormControl fullWidth margin="normal">
-      <FormLabel id="demo-radio-buttons-group-label">
-        {label}
-      </FormLabel>
-
       <div className="container">
         <div {...getRootProps({ style })}>
           <input {...getInputProps()} />
+
+          <p>
+            <strong>{label}</strong>
+          </p>
+
+          <p>
+            <AudioFileIcon fontSize="large" />
+            <VideoFileIcon fontSize="large" />
+            <PictureAsPdfIcon fontSize="large" />
+            <ImageIcon fontSize="large" />
+            <TextSnippetIcon fontSize="large" />
+          </p>
+
           <p>
             Haz <strong>clic aquí</strong>, o <strong>arrastra</strong> los
             archivos

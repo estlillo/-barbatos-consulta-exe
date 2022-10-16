@@ -6,7 +6,7 @@ export default function handler(req, res) {
     },
     {
       id: "Dar mis datos personales",
-      description: "Far mis datos personales",
+      description: "Dar mis datos personales",
     }
   ];
 
