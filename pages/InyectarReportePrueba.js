@@ -3,7 +3,7 @@ import styles from "@/styles/Home.module.css";
 import { Box, Typography } from "@mui/material";
 
 import FormInyeccion from "@/components/InyeccionReporte/FormInyeccion";
-import FormInyeccionPrueba from "./Components/InyeccionReporte/FormInyeccionPrueba";
+import FormInyeccionPrueba from "@/components/InyeccionReporte/FormInyeccionPrueba";
 
 export default function InyectarReportePrueba() {
   return (

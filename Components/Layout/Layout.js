@@ -1,9 +1,9 @@
 import React from "react";
-import Header from "@/layout/Header";
-import Footer from "@/layout/footer/Footer";
+import Header from "@/components/Layout/Header";
+import Footer from "@/components/Layout/footer/Footer";
 import styles from "@/styles/Home.module.css";
 import LinkVolver from "@/components/LinkVolver";
-import NavBar from "@/layout/NavBar";
+import NavBar from "@/components/Layout/NavBar";
 
 
 export default function Layout({ children }) {

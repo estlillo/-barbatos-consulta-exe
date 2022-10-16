@@ -2,7 +2,7 @@ import React from "react";
 import styles from "@/styles/Home.module.css";
 import { Box, Typography } from "@mui/material";
 
-import FormInyeccion from "./Components/FormInyeccion";
+import FormInyeccion from "@/components/FormInyeccion";
 
 export default function Inyectar() {
   return (

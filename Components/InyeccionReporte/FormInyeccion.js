@@ -366,7 +366,7 @@ export default function FormInyeccion() {
                 <Button
                   variant="contained"
                   type="submit"
-                  disabled={true}
+                  disabled={isLoading}
                   endIcon={<SendIcon />}
                 >
                   Enviar

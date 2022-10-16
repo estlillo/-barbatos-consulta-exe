@@ -23,8 +23,8 @@ import SendIcon from "@mui/icons-material/Send";
 import LoadingButton from "@mui/lab/LoadingButton";
 import UploadFileDragNDrop from "../campos-formulario-formik/UploadFileDragNDrop";
 import { InitialValues, ValidationSchema } from "./Validaciones";
-import { UploadFiles } from "pages/servicios-front/UploadFiles";
-import { sleep } from "pages/servicios-front/Utils";
+import { UploadFiles } from "servicios/UploadFiles";
+import { sleep } from "servicios/Utils";
 const JoditEditor = dynamic(importJodit, {
   ssr: false,
 });

@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import Layout from "@/layout/Layout";
+import Layout from "@/components/Layout/Layout";
 import { useEffect, useState } from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
