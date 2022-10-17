@@ -1,12 +1,4 @@
-import {
-  Alert,
-
-  Divider,
-
-  Grid,
-
-  Typography,
-} from "@mui/material";
+import { Alert, Divider, Grid, Typography } from "@mui/material";
 
 import React from "react";
 
@@ -16,7 +8,7 @@ const importJodit = () => import("jodit-react");
 
 import dynamic from "next/dynamic";
 import styles from "@/styles/Home.module.css";
-import {FormikProvider, useFormik } from "formik";
+import { FormikProvider, useFormik } from "formik";
 
 import InputText from "../campos-formulario-formik/InputText";
 import RadioInput from "../campos-formulario-formik/RadioInput";
@@ -32,18 +24,16 @@ import { UploadFiles } from "servicios/UploadFiles";
 import { sleep } from "servicios/Utils";
 import TimePickerInput from "../campos-formulario-formik/TimePickerInput";
 import MultiUsersInput from "../campos-formulario-formik/MultiUsersInput";
+import SeccionDatosPersonales from "./SeccionDatosPersonales";
 const JoditEditor = dynamic(importJodit, {
   ssr: false,
 });
 
 export default function FormInyeccionPrueba() {
   const [data, setData] = React.useState(null);
-  const [labelProceso, setLabelProceso] = React.useState("No");
   const [formatoSeleccionado, setFormatoSeleccionado] = React.useState(null);
 
   const [cargando, setCargando] = React.useState(false);
-
-  const [isProceso, setIsProceso] = React.useState(false);
 
   const [relacionEmpresaOptions, loadingRe, errorRe] = useObtenerData({
     url: "/api/servicios/relacionEmpresaOptions",
@@ -71,15 +61,6 @@ export default function FormInyeccionPrueba() {
 
   const [isLoading, resultado, error] = useInyectarReporteDenuncia(data);
 
-  const handleChangeIsProceso = (event) => {
-    setIsProceso(event.target.checked);
-    if (event.target.checked) {
-      setLabelProceso("Sí");
-    } else {
-      setLabelProceso("No");
-    }
-  };
-
   const sendToApi = async (values) => {
     setCargando(true);
     console.log("values", values);
@@ -95,8 +76,6 @@ export default function FormInyeccionPrueba() {
       console.log("values", values);
       //Primero se cargan los archivos a S3 (Las urls de descarga se setean previamente en los values de formik)
       const res = await UploadFiles(values.adjuntos);
-      console.log("adjuntos ", values.adjuntos);
-      console.log("adjuntos URLS", values.adjuntosUrls);
       await sleep(1500);
       await sendToApi(values);
       formik.resetForm();
@@ -162,6 +141,8 @@ export default function FormInyeccionPrueba() {
                 error={formik.errors.correoElectronico}
               />
             </Grid>
+
+            <SeccionDatosPersonales />
 
             <Grid item xs={12} md={12} className={styles.seccion}>
               <Typography variant="h6" component="h6">
@@ -257,7 +238,7 @@ export default function FormInyeccionPrueba() {
                 label="Agregar a todas las personas implicadas en la denuncia o reporte"
                 value={formik.values.implicados}
                 onChange={formik.handleChange}
-                />
+              />
             </Grid>
 
             <Grid item xs={12} md={12}>
