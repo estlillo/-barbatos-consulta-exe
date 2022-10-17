@@ -6,6 +6,7 @@
         "@/customHooks/*": ["pages/custom-hooks/*"],
         "@/styles/*": ["styles/*"],
         "@/layout/*": ["Components/Layout/*"],
+        "@/formulario/*": ["Components/campos-formulario-formik/*"],
         "@/root/*": ["/*"]
       }
     }

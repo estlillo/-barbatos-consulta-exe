@@ -1,37 +1,36 @@
-import { Alert, Divider, Grid, Typography } from "@mui/material";
-
 import React from "react";
-
-import useObtenerData from "@/customHooks/useObtenerData";
-
-const importJodit = () => import("jodit-react");
-
-import dynamic from "next/dynamic";
-import styles from "@/styles/Home.module.css";
+import { Alert, Divider, Grid, Typography } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { FormikProvider, useFormik } from "formik";
 
-import InputText from "../campos-formulario-formik/InputText";
-import RadioInput from "../campos-formulario-formik/RadioInput";
-import DatePickerInput from "../campos-formulario-formik/DatePickerInput";
-import SelectInput from "../campos-formulario-formik/SelectInput";
-import useInyectarReporteDenuncia from "@/customHooks/useInyectarReporteDenuncia";
-import SendIcon from "@mui/icons-material/Send";
+import styles from "@/styles/Home.module.css";
 
-import LoadingButton from "@mui/lab/LoadingButton";
-import UploadFileDragNDrop from "../campos-formulario-formik/UploadFileDragNDrop";
-import { InitialValues, ValidationSchema } from "./Validaciones";
+import useObtenerData from "@/customHooks/useObtenerData";
+import useInyectarReporteDenuncia from "@/customHooks/useInyectarReporteDenuncia";
+
 import { UploadFiles } from "servicios/UploadFiles";
 import { sleep } from "servicios/Utils";
-import TimePickerInput from "../campos-formulario-formik/TimePickerInput";
-import MultiUsersInput from "../campos-formulario-formik/MultiUsersInput";
+
+import InputText from "@/formulario/InputText";
+import RadioInput from "@/formulario/RadioInput";
+import RadioInputDetails from "@/formulario/RadioInputDetails";
+
+import DatePickerInput from "@/formulario/DatePickerInput";
+import SelectInput from "@/formulario/SelectInput";
+import UploadFileDragNDrop from "@/formulario/UploadFileDragNDrop";
+import TimePickerInput from "@/formulario/TimePickerInput";
+import MultiUsersInput from "@/formulario/MultiUsersInput";
+
+import { InitialValues, ValidationSchema } from "./Validaciones";
 import SeccionDatosPersonales from "./SeccionDatosPersonales";
-const JoditEditor = dynamic(importJodit, {
-  ssr: false,
-});
+import useSubTiposDenuncia from "@/customHooks/useSubTiposDenuncia";
+import SeccionSubTipoDenuncia from "./SeccionSubTipoDenuncia";
+
 
 export default function FormInyeccionPrueba() {
   const [data, setData] = React.useState(null);
-  const [formatoSeleccionado, setFormatoSeleccionado] = React.useState(null);
+
 
   const [cargando, setCargando] = React.useState(false);
 
@@ -75,10 +74,10 @@ export default function FormInyeccionPrueba() {
     onSubmit: async (values) => {
       console.log("values", values);
       //Primero se cargan los archivos a S3 (Las urls de descarga se setean previamente en los values de formik)
-      const res = await UploadFiles(values.adjuntos);
+     // const res = await UploadFiles(values.adjuntos);
       await sleep(1500);
-      await sendToApi(values);
-      formik.resetForm();
+   //   await sendToApi(values);
+   //   formik.resetForm();
     },
   });
 
@@ -231,6 +230,8 @@ export default function FormInyeccionPrueba() {
                 row
               />
             </Grid>
+
+            <SeccionSubTipoDenuncia />
 
             <Grid item xs={12}>
               <MultiUsersInput
