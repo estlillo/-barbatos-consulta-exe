@@ -74,10 +74,10 @@ export default function FormInyeccionPrueba() {
     onSubmit: async (values) => {
       console.log("values", values);
       //Primero se cargan los archivos a S3 (Las urls de descarga se setean previamente en los values de formik)
-     // const res = await UploadFiles(values.adjuntos);
+      const res = await UploadFiles(values.adjuntos);
       await sleep(1500);
-   //   await sendToApi(values);
-   //   formik.resetForm();
+      await sendToApi(values);
+      formik.resetForm();
     },
   });
 

@@ -103,6 +103,10 @@ export default async function handler(req, res) {
             comoSeDioCuena: req.body.data.comoSeDioCuena,
             comoDeseaEnviarReporte: req.body.data.comoDeseaEnviarReporte,
             correoElectronico: req.body.data.correoElectronico,
+            nombreCompleto: req.body.data.nombreCompleto,
+            sexo: req.body.data.sexo,
+            telefonoMovil: req.body.data.telefonoMovil,
+            telefonoFijo: req.body.data.telefonoFijo,
             unidadNegocio: req.body.data.unidadNegocio,
             dondeSucedieronLosHechos: req.body.data.dondeSucedieronLosHechos,
             haceCuantoSucedieronLosHechos: req.body.data.haceCuantoSucedieronLosHechos,
@@ -115,6 +119,7 @@ export default async function handler(req, res) {
             comoSeEntero: req.body.data.comoSeEntero,
             implicados: personasImplicadas,
             tipoDenuncia: req.body.data.tipoDenuncia,
+            subTipoDenuncia: req.body.data.subTipoDenuncia,
 
           },
           tieneProceso: false, 
